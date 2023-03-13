@@ -1,0 +1,72 @@
+WindowManager:
+    MainWindow:
+    HistoryWindow:
+    SettingWindow:
+
+<MainWindow>:
+    name: 'main'
+
+    RelativeLayout:
+        orientation: 'vertical'
+        RelativeLayout:
+            #canvas.before:
+            #    Rectangle:
+            #        size: self.size
+            #        source: 'images/pink.jpg'
+            Image:
+                source: 'images/pink.jpg'
+                allow_stretch: True
+                keep_ratio: False
+            Label:
+                text: 'Find Myself'
+        BoxLayout:
+            size_hint: 1, 0.1
+            Button:
+                text: 'History'
+                on_release:
+                    app.root.current = 'history'
+                    root.manager.transition.direction = 'left'
+            Button:
+                text: 'Setting'
+                on_release:
+                    app.root.current = 'setting'
+                    root.manager.transition.direction = 'left'
+
+<HistoryWindow>:
+    name: 'history'
+
+    RelativeLayout:
+        Image:
+            source: 'images/green.jpg'
+            allow_stretch: True
+            keep_ratio: False
+        Label:
+            text: 'History'
+        Button:
+            text: 'Back'
+            size_hint: None, None
+            size: '70dp', '70dp'
+            pos: '10dp', '10dp'
+            on_release:
+                app.root.current = 'main'
+                root.manager.transition.direction = 'right'
+
+<SettingWindow>:
+    name: 'setting'
+
+    RelativeLayout:
+        Image:
+            source: 'images/blue.jpg'
+            allow_stretch: True
+            keep_ratio: False
+        Label:
+            text: 'Setting'
+        Button:
+            text: 'Back'
+            size_hint: None, None
+            size: '70dp', '70dp'
+            pos: '10dp', '10dp'
+            on_release:
+                app.root.current = 'main'
+                root.manager.transition.direction = 'right'
+
