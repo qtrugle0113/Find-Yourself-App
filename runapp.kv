@@ -7,27 +7,66 @@ WindowManager:
     name: 'main'
 
     RelativeLayout:
-        orientation: 'vertical'
         RelativeLayout:
-            #canvas.before:
-            #    Rectangle:
-            #        size: self.size
-            #        source: 'images/pink.jpg'
             Image:
                 source: 'images/pink.jpg'
                 allow_stretch: True
                 keep_ratio: False
-            Label:
-                text: 'Find Myself'
+
+            RelativeLayout:
+                pos_hint: {'center_y': 0.6}
+                Button:
+                    id: main_btn
+                    background_color: (0,0,0,0)
+                    background_normal: ''
+                    size_hint: (0.55, 0.2) if root.width < root.height else (0.5, 0.5) if root.width/root.height < 1.75 else (0.3, 0.5)
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                Image:
+                    source: 'images/color_stain.png'
+                    color: (1,1,1,0.5) if root.ids.main_btn.state == 'normal' else (1,1,1,1)
+                    size_hint: (0.6, 0.6) if root.ids.main_btn.state == 'normal' else (0.65, 0.65)
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                Label:
+                    text: '   Find\nYourself'
+                    color: (50/255, 50/255, 50/255, 1) if root.ids.main_btn.state == 'normal' else (10/255, 10/255, 10/255, 1)
+                    font_name: 'fonts/vintage.ttf'
+                    font_size: (self.height + self.width)/25 if root.ids.main_btn.state == 'normal' else (self.height + self.width)/24
+                    #outline_color: (0/255, 0/255, 0/255)
+                    #outline_width: '2dp'
+
         BoxLayout:
-            size_hint: 1, 0.1
-            Button:
+            orientation: 'vertical'
+            Image:
+                source: 'images/arrow.png'
+                color: (0.7,0.7,0.7,1)
+            Label:
+                text: 'Click here to find yourself today'
+                font_name: 'fonts/vintage1'
+                font_size: dp((self.height + self.width)/30)
+                color: (50/255, 50/255, 50/255, 1)
+                outline_color: (0/255, 0/255, 0/255)
+                outline_width: '1dp'
+
+        BoxLayout:
+            size_hint: 1, 0.075
+            pos_hint: {'center_x': .5, }
+            padding: '10dp'
+            spacing: '10dp'
+
+            OptionButton:
                 text: 'History'
+                font_name: 'fonts/vintage2.otf'
+                font_size: '50dp'
                 on_release:
                     app.root.current = 'history'
                     root.manager.transition.direction = 'left'
-            Button:
+
+            OptionButton:
                 text: 'Setting'
+                font_name: 'fonts/vintage2.otf'
+                font_size: '50dp'
                 on_release:
                     app.root.current = 'setting'
                     root.manager.transition.direction = 'left'
@@ -40,13 +79,18 @@ WindowManager:
             source: 'images/green.jpg'
             allow_stretch: True
             keep_ratio: False
+
         Label:
             text: 'History'
+            font_name: 'fonts/vintage1'
+            font_size: '80dp'
+            outline_color: (100/255, 100/255, 100/255)
+            outline_width: '10dp'
+
         Button:
             text: 'Back'
             size_hint: None, None
             size: '70dp', '70dp'
-            pos: '10dp', '10dp'
             on_release:
                 app.root.current = 'main'
                 root.manager.transition.direction = 'right'
@@ -59,14 +103,42 @@ WindowManager:
             source: 'images/blue.jpg'
             allow_stretch: True
             keep_ratio: False
+
         Label:
             text: 'Setting'
+            font_name: 'fonts/vintage1'
+            font_size: '80dp'
+            outline_color: (100/255, 100/255, 100/255)
+            outline_width: '10dp'
+
         Button:
             text: 'Back'
             size_hint: None, None
             size: '70dp', '70dp'
-            pos: '10dp', '10dp'
             on_release:
                 app.root.current = 'main'
                 root.manager.transition.direction = 'right'
+
+
+<OptionButton@Button>:
+    background_color: (0,0,0,0)
+    background_normal: ''
+    canvas.before:
+        Color:
+            rgba: (205/255, 140/255, 185/255, 1) if self.state == 'normal' else (165/255, 50/255, 145/255, 1)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [0]
+        Color:
+            rgba: (165/255, 50/255, 145/255, 1) if self.state == 'normal' else (80/255, 0/255, 95/255, 1)
+        Line:
+            rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], 0)
+            width: 1.5
+
+
+
+
+
+
 
