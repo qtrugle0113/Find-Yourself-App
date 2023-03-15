@@ -1,7 +1,9 @@
 WindowManager:
     MainWindow:
+    QnAWindow:
     HistoryWindow:
     SettingWindow:
+#QnAWindow:
 
 <MainWindow>:
     name: 'main'
@@ -21,6 +23,9 @@ WindowManager:
                     background_normal: ''
                     size_hint: (0.55, 0.2) if root.width < root.height else (0.5, 0.5) if root.width/root.height < 1.75 else (0.3, 0.5)
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    on_release:
+                        app.root.current = 'qna'
+                        root.manager.transition.direction = 'left'
 
                 Image:
                     source: 'images/color_stain.png'
@@ -36,18 +41,12 @@ WindowManager:
                     #outline_color: (0/255, 0/255, 0/255)
                     #outline_width: '2dp'
 
-        BoxLayout:
-            orientation: 'vertical'
-            Image:
-                source: 'images/arrow.png'
-                color: (0.7,0.7,0.7,1)
-            Label:
-                text: 'Click here to find yourself today'
-                font_name: 'fonts/vintage1'
-                font_size: dp((self.height + self.width)/30)
-                color: (50/255, 50/255, 50/255, 1)
-                outline_color: (0/255, 0/255, 0/255)
-                outline_width: '1dp'
+                Label:
+                    text: 'Click here'
+                    font_name: 'fonts/vintage1'
+                    font_size: dp((self.height + self.width)/45)
+                    color: (200/255, 200/255, 2000/255, 0.3) if root.ids.main_btn.state == 'normal' else (0,0,0,0)
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
         BoxLayout:
             size_hint: 1, 0.075
@@ -70,6 +69,58 @@ WindowManager:
                 on_release:
                     app.root.current = 'setting'
                     root.manager.transition.direction = 'left'
+
+
+<QnAWindow>:
+    name: 'qna'
+
+    RelativeLayout:
+        Image:
+            source: 'images/sunset.jpg'
+            allow_stretch: True
+            keep_ratio: False
+            color: (1,1,1,0.5)
+        Label:
+            text: "Your mood today:"
+            font_name: 'fonts/vintage1'
+            font_size: dp(25)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+        Slider:
+            id: mood_slider
+            min: 0
+            max: 100
+            pos_hint: {'center_x': 0.5, 'center_y': 0.15}
+            size_hint: 0.8, 0.05
+            value: 50
+            on_value: root.on_slider_value(self)
+        Label:
+            text: root.mood
+            font_name: 'fonts/vintage1'
+            font_size: dp(40)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.075}
+        QuestionChatBox:
+            id: question
+            padding: (10, 0)
+            #pos_hint: {'center_x': 0.55, 'center_y': 0.75}
+            pos_hint: {'x': 0.05, 'center_y': 0.9}
+            text:'If you were going to start your own company, what would it he?'
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+            font_size: dp(17)
+            size_hint: (0.75, 0.08) if root.width < root.height else (0.3, 0.08)
+            color: (0, 0, 0)
+
+
+        Button:
+            text: 'Back'
+            size_hint: None, None
+            size: '70dp', '70dp'
+            on_release:
+                app.root.current = 'main'
+                root.manager.transition.direction = 'right'
+
+
 
 <HistoryWindow>:
     name: 'history'
@@ -135,6 +186,18 @@ WindowManager:
         Line:
             rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], 0)
             width: 1.5
+
+<QuestionChatBox@Label>:
+    canvas.before:
+        Color:
+            rgba: (200/255, 200/255, 200/255, 0.5)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [10,10,10,0]
+        Triangle:
+            points: 0, self.pos[1], self.pos[0], self.pos[1], self.pos[0], self.pos[1] + self.size[1]/4
+
 
 
 
