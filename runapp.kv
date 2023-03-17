@@ -1,9 +1,10 @@
-WindowManager:
-    MainWindow:
-    QnAWindow:
-    HistoryWindow:
-    SettingWindow:
-#QnAWindow:
+#WindowManager:
+#    MainWindow:
+#    QnAWindow:
+#    HistoryWindow:
+#    SettingWindow:
+HistoryWindow:
+
 
 <MainWindow>:
     name: 'main'
@@ -45,7 +46,7 @@ WindowManager:
                     text: 'Click here'
                     font_name: 'fonts/vintage1'
                     font_size: dp((self.height + self.width)/45)
-                    color: (200/255, 200/255, 2000/255, 0.3) if root.ids.main_btn.state == 'normal' else (0,0,0,0)
+                    color: (200/255, 200/255, 200/255, 0.3) if root.ids.main_btn.state == 'normal' else (0,0,0,0)
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
         BoxLayout:
@@ -110,7 +111,22 @@ WindowManager:
             font_size: dp(17)
             size_hint: (0.75, 0.08) if root.width < root.height else (0.3, 0.08)
             color: (0, 0, 0)
-
+        AnswerChatBox:
+            id:answer:
+            padding: (10, 0)
+            #pos_hint: {'center_x': 0.55, 'center_y': 0.75}
+            pos_hint: {'right': 0.95, 'center_y': 0.7}
+            text:'Answer Here Answer Here Answer Here Answer Here'
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+            font_size: dp(17)
+            size_hint: (0.75, 0.05) if root.width < root.height else (0.3, 0.05)
+            color: (0, 0, 0)
+        TypeBox:
+            text: 'Type your answer...'
+            size_hint: (0.8, 0.05)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.3}
 
         Button:
             text: 'Back'
@@ -127,24 +143,34 @@ WindowManager:
 
     RelativeLayout:
         Image:
-            source: 'images/green.jpg'
+            source: 'images/pink.jpg'
             allow_stretch: True
             keep_ratio: False
+            color: (1,1,1,0.5)
+        BoxLayout:
+            orientation: 'vertical'
+            TopBar:
+                Label:
+                    text: root.today_text
+                    font_name: 'fonts/kosan'
+                    color: (0,0,0)
+                    bold: True
+                    pos_hint: {'center_y': 0.5}
+                    font_size: dp(30)
+            ScrollView:
+                CalendarBox:
+                    size_hint: 1, None
+                    height: 3000
+            #CalendarScroll:
+            BottomBar:
+                Button:
+                    text: 'Back'
+                    size_hint: None, None
+                    size: '70dp', '70dp'
+                    on_release:
+                        app.root.current = 'main'
+                        root.manager.transition.direction = 'right'
 
-        Label:
-            text: 'History'
-            font_name: 'fonts/vintage1'
-            font_size: '80dp'
-            outline_color: (100/255, 100/255, 100/255)
-            outline_width: '10dp'
-
-        Button:
-            text: 'Back'
-            size_hint: None, None
-            size: '70dp', '70dp'
-            on_release:
-                app.root.current = 'main'
-                root.manager.transition.direction = 'right'
 
 <SettingWindow>:
     name: 'setting'
@@ -196,12 +222,87 @@ WindowManager:
             pos: self.pos
             radius: [10,10,10,0]
         Triangle:
-            points: 0, self.pos[1], self.pos[0], self.pos[1], self.pos[0], self.pos[1] + self.size[1]/4
+            points: self.pos[0] - 15, self.pos[1], self.pos[0], self.pos[1], self.pos[0], self.pos[1] + self.size[1]/4
 
 
+<AnswerChatBox@Label>:
+    canvas.before:
+        Color:
+            rgba: (200/255, 200/255, 200/255, 0.5)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [10,10,0,10]
+        Triangle:
+            points: self.pos[0] + self.size[0], self.pos[1], self.pos[0] + self.size[0] + 15, self.pos[1], self.pos[0] + self.size[0], self.pos[1] + self.size[1]/4
 
 
+<TypeBox@Button>:
+    background_color: (0,0,0,0)
+    background_normal: ''
+    canvas.before:
+        Color:
+            rgba: (200/255, 200/255, 200/255, 0.4)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [30,30,30,30]
 
 
+<TopBar@BoxLayout>:
+    size_hint: 1, 0.08
+    canvas.before:
+        Color:
+            rgba: (240/255, 240/255, 240/255, 0.3)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [0,0,10,10]
+
+<CalendarBox>:
+    padding: (0,10,0,10)
+    spacing: dp(5)
+    canvas.before:
+        Color:
+            rgba: (240/255, 0/255, 0/255, 0)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [10,10,10,10]
+
+<BottomBar@BoxLayout>:
+    size_hint: 1, 0.08
+    canvas.before:
+        Color:
+            rgba: (240/255, 240/255, 240/255, 1)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [10,10,0,0]
+
+<SelectDayButton>:
+    background_color: (0,0,0,0)
+    background_normal: ''
+    canvas.before:
+        Color:
+            rgba: (200/255, 200/255, 200/255, 0.4) if self.state == 'normal' else (200/255, 200/255, 200/255, 1)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [20]
+    Test:
 
 
+#<CalendarScroll@ScrollView>:
+#    CalendarBox:
+#        size_hint: 1, None
+#        height: 4000
+
+<Test@GridLayout>:
+    cols: 3
+    Label:
+        text: '1'
+    Label:
+        text: '2'
+    Label:
+        text: '3'
