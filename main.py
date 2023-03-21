@@ -1,3 +1,5 @@
+import pandas as pd
+import random
 import kivy
 from kivy.app import App
 from kivy.config import Config
@@ -5,6 +7,7 @@ from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import StringProperty
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.stacklayout import StackLayout
 
@@ -27,6 +30,12 @@ class MainWindow(Screen):
     pass
 
 
+def today_question():
+    questions = pd.read_csv('data/questions_list.csv')
+    today_ques = questions.loc[random.randint(0, len(questions) - 1), 'english']
+    return today_ques
+
+
 class QnAWindow(Screen):
     mood = StringProperty('Mood')
 
@@ -42,6 +51,12 @@ class QnAWindow(Screen):
             self.mood = 'Positive'
         else:
             self.mood = 'Happy'
+
+    question = StringProperty(today_question())
+    answer = StringProperty('...')
+
+    def test(self):
+        print(self.ids.answer_text)
 
 
 class HistoryWindow(Screen):
@@ -71,6 +86,7 @@ class HistoryWindow(Screen):
     elif month == 10:
         month_name = 'October'
     elif month == 11:
+
         month_name = 'November'
     else:
         month_name = 'December'
@@ -88,21 +104,20 @@ class HistoryWindow(Screen):
 '''
 
 
-class SelectDayButton(Button):
+# class SelectDayButton(Button):
+#    pass
+class SelectDayLayout(RelativeLayout):
     pass
 
 
-
 class CalendarBox(GridLayout):
-
     cols = 1
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         for i in range(30):
-            b = SelectDayButton()
+            b = SelectDayLayout()
             self.add_widget(b)
-
 
 
 class SettingWindow(Screen):

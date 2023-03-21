@@ -1,9 +1,10 @@
+#:import Factory kivy.factory.Factory
 #WindowManager:
 #    MainWindow:
 #    QnAWindow:
 #    HistoryWindow:
 #    SettingWindow:
-HistoryWindow:
+QnAWindow:
 
 
 <MainWindow>:
@@ -104,7 +105,7 @@ HistoryWindow:
             padding: (10, 0)
             #pos_hint: {'center_x': 0.55, 'center_y': 0.75}
             pos_hint: {'x': 0.05, 'center_y': 0.9}
-            text:'If you were going to start your own company, what would it he?'
+            text: root.question
             text_size: self.size
             halign: 'left'
             valign: 'middle'
@@ -116,7 +117,7 @@ HistoryWindow:
             padding: (10, 0)
             #pos_hint: {'center_x': 0.55, 'center_y': 0.75}
             pos_hint: {'right': 0.95, 'center_y': 0.7}
-            text:'Answer Here Answer Here Answer Here Answer Here'
+            text:root.answer
             text_size: self.size
             halign: 'left'
             valign: 'middle'
@@ -127,6 +128,7 @@ HistoryWindow:
             text: 'Type your answer...'
             size_hint: (0.8, 0.05)
             pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+            on_release: Factory.AnswerWriteBox().open()
 
         Button:
             text: 'Back'
@@ -161,7 +163,6 @@ HistoryWindow:
                 CalendarBox:
                     size_hint: 1, None
                     height: 3000
-            #CalendarScroll:
             BottomBar:
                 Button:
                     text: 'Back'
@@ -242,7 +243,7 @@ HistoryWindow:
     background_normal: ''
     canvas.before:
         Color:
-            rgba: (200/255, 200/255, 200/255, 0.4)
+            rgba: (200/255, 200/255, 200/255, 0.4) if self.state == 'normal' else (200/255, 200/255, 200/255, 0.7)
         RoundedRectangle:
             size: self.size
             pos: self.pos
@@ -274,13 +275,14 @@ HistoryWindow:
     size_hint: 1, 0.08
     canvas.before:
         Color:
-            rgba: (240/255, 240/255, 240/255, 1)
+            rgba: (240/255, 240/255, 240/255, 0.3)
         RoundedRectangle:
             size: self.size
             pos: self.pos
             radius: [10,10,0,0]
 
-<SelectDayButton>:
+<SelectButton@Button>:
+    #background_color: (200/255, 200/255, 200/255, 0.4) if self.state == 'normal' else (200/255, 200/255, 200/255, 1)
     background_color: (0,0,0,0)
     background_normal: ''
     canvas.before:
@@ -290,19 +292,53 @@ HistoryWindow:
             size: self.size
             pos: self.pos
             radius: [20]
-    Test:
+
+<SelectDayLayout>:
+    size_hint: 1, 0.25
+    pos_hint: {'center_x': .5, 'center_y': .5}
+    SelectButton:
+    BoxLayout:
+        Label:
+            size_hint: 0.2 , 1
+            text: 'date'
+        Label:
+            text: 'question test question test question test question test'
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+        Label:
+            size_hint: 0.2 , 1
+            text: 'mood'
 
 
-#<CalendarScroll@ScrollView>:
-#    CalendarBox:
-#        size_hint: 1, None
-#        height: 4000
-
-<Test@GridLayout>:
-    cols: 3
-    Label:
-        text: '1'
-    Label:
-        text: '2'
-    Label:
-        text: '3'
+<AnswerWriteBox@Popup>:
+    background_color: (0,0,0,0)
+    title: 'Your answer:'
+    auto_dismiss: True
+    size_hint: 0.9, 0.65
+    pos_hint: {'center_x': 0.5, 'center_y': 0.55}
+    BoxLayout
+        orientation: 'vertical'
+        spacing: dp(10)
+        TextInput:
+            id: answer_text
+            background_color: (0,0,0,0)
+            multiline: True
+            #font_size: dp(15)
+            canvas.before:
+                Color:
+                    rgba: (1, 1, 1, 0.2)
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [0,0,10,10]
+                Color:
+                    rgba: (1, 1, 1, 1)
+        Button:
+            size_hint: 0.2, 0.1
+            #size: '70dp', '70dp'
+            pos_hint: {'right': 1, 'bottom': 0}
+            text: 'Save'
+            font_size: dp(15)
+            on_release: root.dismiss()
+            on_press: root.test()
