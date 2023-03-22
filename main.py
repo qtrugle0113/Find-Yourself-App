@@ -7,6 +7,7 @@ from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import StringProperty
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.stacklayout import StackLayout
@@ -19,7 +20,7 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 import calendar
-from datetime import date
+from datetime import date, datetime
 
 
 class WindowManager(ScreenManager):
@@ -32,31 +33,43 @@ class MainWindow(Screen):
 
 def today_question():
     questions = pd.read_csv('data/questions_list.csv')
-    today_ques = questions.loc[random.randint(0, len(questions) - 1), 'english']
-    return today_ques
+    ques_id = random.randint(0, len(questions) - 1) + 1
+    today_ques = questions.loc[ques_id - 1, 'english']
+    return today_ques, ques_id
+
+
+answers_list = pd.DataFrame(columns=['id', 'date', 'question', 'answer', 'mood'])
 
 
 class QnAWindow(Screen):
-    mood = StringProperty('Mood')
+    mood = StringProperty('')
 
     def on_slider_value(self, widget):
 
         if widget.value < 20:
-            self.mood = 'Sad'
+            self.mood = 'sad'
         elif widget.value < 40:
-            self.mood = 'Negative'
+            self.mood = 'negative'
         elif widget.value < 60:
-            self.mood = 'Normal'
+            self.mood = 'normal'
         elif widget.value < 80:
-            self.mood = 'Positive'
+            self.mood = 'positive'
         else:
-            self.mood = 'Happy'
+            self.mood = 'happy'
 
-    question = StringProperty(today_question())
-    answer = StringProperty('...')
+    question, ques_id = today_question()
+    answer = ''
 
-    def test(self):
-        print(self.ids.answer_text)
+    def set_answer(self, ans):
+        self.answer = ans
+        self.ids.answer.text = self.answer
+        self.ids.answer.size_hint = (0.75, 0.05) if self.width < self.height else (0.3, 0.05)
+
+        global answers_list
+
+        answers_list = answers_list.append({'id': self.ques_id, 'date': datetime.today().strftime('%Y-%m-%d'), 'question': self.question, 'answer': self.answer, 'mood': self.mood},
+                                           ignore_index=True)
+        print(answers_list)
 
 
 class HistoryWindow(Screen):

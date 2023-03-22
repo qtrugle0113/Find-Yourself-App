@@ -1,10 +1,10 @@
 #:import Factory kivy.factory.Factory
-#WindowManager:
-#    MainWindow:
-#    QnAWindow:
-#    HistoryWindow:
-#    SettingWindow:
-QnAWindow:
+WindowManager:
+    MainWindow:
+    QnAWindow:
+    HistoryWindow:
+    SettingWindow:
+#QnAWindow:
 
 
 <MainWindow>:
@@ -95,16 +95,26 @@ QnAWindow:
             size_hint: 0.8, 0.05
             value: 50
             on_value: root.on_slider_value(self)
-        Label:
-            text: root.mood
-            font_name: 'fonts/vintage1'
-            font_size: dp(40)
+        #Label:
+        #    text: root.mood
+        #    font_name: 'fonts/vintage1'
+        #    font_size: dp(40)
+        #    pos_hint: {'center_x': 0.5, 'center_y': 0.075}
+        Image:
+            source: 'images/moods/' + root.mood + '.png'
+            size_hint: None, None
+            width: dp(70)
+            height: dp(70)
+            #allow_stretch: False
+            #keep_ratio: True
             pos_hint: {'center_x': 0.5, 'center_y': 0.075}
+            color: (1,1,1,0) if root.mood == '' else (1,1,1,1)
         QuestionChatBox:
             id: question
             padding: (10, 0)
             #pos_hint: {'center_x': 0.55, 'center_y': 0.75}
             pos_hint: {'x': 0.05, 'center_y': 0.9}
+            #font_name: 'fonts/korean1.ttf'
             text: root.question
             text_size: self.size
             halign: 'left'
@@ -113,18 +123,20 @@ QnAWindow:
             size_hint: (0.75, 0.08) if root.width < root.height else (0.3, 0.08)
             color: (0, 0, 0)
         AnswerChatBox:
-            id:answer:
+            id:answer
             padding: (10, 0)
             #pos_hint: {'center_x': 0.55, 'center_y': 0.75}
             pos_hint: {'right': 0.95, 'center_y': 0.7}
-            text:root.answer
+            text: root.answer
             text_size: self.size
+            #font_name: 'fonts/korean1.ttf'
             halign: 'left'
             valign: 'middle'
             font_size: dp(17)
-            size_hint: (0.75, 0.05) if root.width < root.height else (0.3, 0.05)
+            size_hint: (0,0) #if root.answer == '' else (0.75, 0.05) if root.width < root.height else (0.3, 0.05)
             color: (0, 0, 0)
         TypeBox:
+            id: typebox
             text: 'Type your answer...'
             size_hint: (0.8, 0.05)
             pos_hint: {'center_x': 0.5, 'center_y': 0.3}
@@ -316,7 +328,7 @@ QnAWindow:
     title: 'Your answer:'
     auto_dismiss: True
     size_hint: 0.9, 0.65
-    pos_hint: {'center_x': 0.5, 'center_y': 0.55}
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
     BoxLayout
         orientation: 'vertical'
         spacing: dp(10)
@@ -324,7 +336,9 @@ QnAWindow:
             id: answer_text
             background_color: (0,0,0,0)
             multiline: True
+            text: app.root.get_screen('qna').answer
             #font_size: dp(15)
+            #font_name: 'fonts/korean1.ttf'
             canvas.before:
                 Color:
                     rgba: (1, 1, 1, 0.2)
@@ -338,7 +352,9 @@ QnAWindow:
             size_hint: 0.2, 0.1
             #size: '70dp', '70dp'
             pos_hint: {'right': 1, 'bottom': 0}
-            text: 'Save'
+            text: 'Answer'
             font_size: dp(15)
-            on_release: root.dismiss()
-            on_press: root.test()
+            on_release:
+                root.dismiss()
+                #app.root.set_answer(answer_text.text)
+                app.root.get_screen('qna').set_answer(answer_text.text)
