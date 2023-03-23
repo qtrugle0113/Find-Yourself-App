@@ -1,8 +1,10 @@
 import pandas as pd
+import numpy as np
 import random
 import kivy
 from kivy.app import App
 from kivy.config import Config
+from kivy.graphics import Color, RoundedRectangle
 from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import StringProperty
@@ -19,8 +21,8 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
-import calendar
-from datetime import date, datetime
+from calendar import monthrange
+from datetime import date, timedelta  # datetime
 
 
 class WindowManager(ScreenManager):
@@ -38,7 +40,9 @@ def today_question():
     return today_ques, ques_id
 
 
-answers_list = pd.DataFrame(columns=['id', 'date', 'question', 'answer', 'mood'])
+# answers_list = pd.DataFrame(columns=['id', 'date', 'question', 'answer', 'mood'])
+# answers_list.to_csv('user/answers_list.csv', sep=',', na_rep='NaN', index=False)
+answers_list = pd.read_csv('user/answers_list.csv')
 
 
 class QnAWindow(Screen):
@@ -66,10 +70,34 @@ class QnAWindow(Screen):
         self.ids.answer.size_hint = (0.75, 0.05) if self.width < self.height else (0.3, 0.05)
 
         global answers_list
+        # datetime.today().strftime('%Y-%m-%d')
 
-        answers_list = answers_list.append({'id': self.ques_id, 'date': datetime.today().strftime('%Y-%m-%d'), 'question': self.question, 'answer': self.answer, 'mood': self.mood},
-                                           ignore_index=True)
+        if len(answers_list[answers_list.date == str(date.today())]) == 0:
+            answers_list = answers_list.append(
+                {'id': self.ques_id, 'date': str(date.today()), 'question': self.question,
+                 'answer': self.answer, 'mood': self.mood},
+                ignore_index=True)
+        else:
+            answers_list.loc[
+                answers_list.date == str(date.today()), ['id', 'question', 'answer', 'mood']] \
+                = [self.ques_id, self.question, self.answer, self.mood]
         print(answers_list)
+        answers_list.to_csv('user/answers_list.csv', sep=',', na_rep='NaN', index=False)
+
+    def save_answer(self):
+        global answers_list
+
+        if len(answers_list[answers_list.date == str(date.today())]) == 0:
+            answers_list = answers_list.append(
+                {'id': self.ques_id, 'date': str(date.today()), 'question': self.question,
+                 'answer': self.answer, 'mood': self.mood},
+                ignore_index=True)
+        else:
+            answers_list.loc[
+                answers_list.date == str(date.today()), ['id', 'question', 'answer', 'mood']] \
+                = [self.ques_id, self.question, self.answer, self.mood]
+        print(answers_list)
+        answers_list.to_csv('user/answers_list.csv', sep=',', na_rep='NaN', index=False)
 
 
 class HistoryWindow(Screen):
@@ -117,6 +145,39 @@ class HistoryWindow(Screen):
 '''
 
 
+class SelectDayHistory(Screen):
+    mood = 'normal'
+    question = 'question'
+    answer = 'answer'
+
+    def access_history(self, select_date):
+        day = "2023-{month}-{day}".format(month=select_date[0:2], day=select_date[3:5])
+
+        if len(answers_list[answers_list['date'] == day]) != 0:
+            self.question = answers_list[answers_list['date'] == day].question.iloc[0]
+        else:
+            self.question = ''
+
+        if len(answers_list[answers_list['date'] == day]) != 0 and \
+                answers_list[answers_list['date'] == day].answer.iloc[0] is not np.NaN:
+            self.answer = answers_list[answers_list['date'] == day].answer.iloc[0]
+        else:
+            self.answer = ''
+
+        if len(answers_list[answers_list['date'] == day]) != 0 and \
+                answers_list[answers_list['date'] == day].mood.iloc[0] is not np.NaN:
+            self.mood = answers_list[answers_list['date'] == day].mood.iloc[0]
+        else:
+            self.mood = ''
+
+        self.ids.last_question.text = self.question
+        self.ids.last_answer.text = self.answer
+        if self.mood == '':
+            self.ids.last_mood.color = (1, 1, 1, 0)
+        else:
+            self.ids.last_mood.source = 'images/moods/' + self.mood + '.png'
+
+
 # class SelectDayButton(Button):
 #    pass
 class SelectDayLayout(RelativeLayout):
@@ -128,9 +189,63 @@ class CalendarBox(GridLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        for i in range(30):
+        for i in range(monthrange(date.today().year, date.today().month)[1]):
             b = SelectDayLayout()
             self.add_widget(b)
+
+            day = date.today().replace(day=1) + timedelta(days=i)
+
+            b.ids.date.text = day.strftime('%m/%d')
+
+            if len(answers_list[answers_list['date'] == str(day)]) != 0:
+                question = answers_list[answers_list['date'] == str(day)].question.iloc[0]
+            else:
+                question = ''
+            b.ids.question.text = question
+
+            if len(answers_list[answers_list['date'] == str(day)]) != 0 and \
+                    answers_list[answers_list['date'] == str(day)].mood.iloc[0] is not np.NaN:
+                mood = answers_list[answers_list['date'] == str(day)].mood.iloc[0]
+            else:
+                mood = ''
+            if mood == '':
+
+                # b.ids.mood.source = 'images/moods/normal.png'
+                b.ids.mood.color = (1, 1, 1, 0)
+            else:
+                b.ids.mood.source = 'images/moods/' + mood + '.png'
+
+            if question == '':
+                b.ids.select_btn.disabled = True
+
+            '''
+            row = SelectDayLayout()
+            row_inside = BoxLayout()
+            today = date.today().replace(day=1) + timedelta(days=i)
+            date_area = Label(text=today.strftime('%m/%d'), size_hint=(0.2, 1))
+
+
+            #question = answers_list[answers_list['date'] == today.strftime('%Y-%m-%d')].answer
+            if len(answers_list[answers_list['date'] == str(today)]) != 0:
+                question = answers_list[answers_list['date'] == str(today)].question.iloc[0]
+            else:
+                question = ''
+
+            mood_area = Label(text='mood', size_hint=(0.2, 1))
+            question_area = Label(text=question, halign='left', valign='middle')
+
+            mood_area.canvas.add(Color(2/ 255, 200/ 255, 2/ 255, 0.4))
+            mood_area.canvas.add(RoundedRectangle(size=self.size, pos=self.pos, radius=[20]))
+
+            question_area.canvas.add(Color(200/255, 2/255, 2/255, 0.4))
+            question_area.canvas.add(RoundedRectangle(size=self.size, pos=self.pos, radius = [20]))
+
+            row_inside.add_widget(date_area)
+            row_inside.add_widget(question_area)
+            row_inside.add_widget(mood_area)
+            row.add_widget(row_inside)
+            self.add_widget(row)
+            '''
 
 
 class SettingWindow(Screen):

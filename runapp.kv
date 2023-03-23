@@ -3,6 +3,7 @@ WindowManager:
     MainWindow:
     QnAWindow:
     HistoryWindow:
+    SelectDayHistory:
     SettingWindow:
 #QnAWindow:
 
@@ -95,13 +96,8 @@ WindowManager:
             size_hint: 0.8, 0.05
             value: 50
             on_value: root.on_slider_value(self)
-        #Label:
-        #    text: root.mood
-        #    font_name: 'fonts/vintage1'
-        #    font_size: dp(40)
-        #    pos_hint: {'center_x': 0.5, 'center_y': 0.075}
         Image:
-            source: 'images/moods/' + root.mood + '.png'
+            source: 'images/moods/normal.png' if root.mood == '' else 'images/moods/' + root.mood + '.png'
             size_hint: None, None
             width: dp(70)
             height: dp(70)
@@ -149,6 +145,92 @@ WindowManager:
             on_release:
                 app.root.current = 'main'
                 root.manager.transition.direction = 'right'
+        Button:
+            text: 'Save'
+            size_hint: None, None
+            size: '70dp', '70dp'
+            pos_hint: {'right': 1}
+            on_release: root.save_answer()
+
+
+<SelectDayHistory>:
+    name: 'qna_history'
+
+    RelativeLayout:
+        Image:
+            source: 'images/sunset.jpg'
+            allow_stretch: True
+            keep_ratio: False
+            color: (1,1,1,0.5)
+        Label:
+            text: "Your mood:"
+            font_name: 'fonts/vintage1'
+            font_size: dp(25)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+        #Slider:
+        #    id: mood_slider
+        #    min: 0
+        #    max: 100
+        #    pos_hint: {'center_x': 0.5, 'center_y': 0.15}
+        #    size_hint: 0.8, 0.05
+        #    value: 50
+        #    on_value: root.on_slider_value(self)
+        Image:
+            id: last_mood
+            source: 'images/moods/normal.png' if root.mood == '' else 'images/moods/' + root.mood + '.png'
+            size_hint: None, None
+            width: dp(70)
+            height: dp(70)
+            #allow_stretch: False
+            #keep_ratio: True
+            pos_hint: {'center_x': 0.5, 'center_y': 0.075}
+            color: (1,1,1,0) if root.mood == '' else (1,1,1,1)
+        QuestionChatBox:
+            id: last_question
+            padding: (10, 0)
+            #pos_hint: {'center_x': 0.55, 'center_y': 0.75}
+            pos_hint: {'x': 0.05, 'center_y': 0.9}
+            #font_name: 'fonts/korean1.ttf'
+            text: root.question
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+            font_size: dp(17)
+            size_hint: (0.75, 0.08) if root.width < root.height else (0.3, 0.08)
+            color: (0, 0, 0)
+        AnswerChatBox:
+            id:last_answer
+            padding: (10, 0)
+            #pos_hint: {'center_x': 0.55, 'center_y': 0.75}
+            pos_hint: {'right': 0.95, 'center_y': 0.7}
+            text: root.answer
+            text_size: self.size
+            #font_name: 'fonts/korean1.ttf'
+            halign: 'left'
+            valign: 'middle'
+            font_size: dp(17)
+            size_hint: (0.75, 0.05) if root.width < root.height else (0.3, 0.05)
+            color: (0, 0, 0)
+        #TypeBox:
+        #    id: typebox
+        #    text: 'Type your answer...'
+        #    size_hint: (0.8, 0.05)
+        #    pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+        #    on_release: Factory.AnswerWriteBox().open()
+
+        Button:
+            text: 'Back'
+            size_hint: None, None
+            size: '70dp', '70dp'
+            on_release:
+                app.root.current = 'history'
+                root.manager.transition.direction = 'right'
+        #Button:
+        #    text: 'Save'
+        #    size_hint: None, None
+        #    size: '70dp', '70dp'
+        #    pos_hint: {'right': 1}
+        #    on_release: root.save_answer()
 
 
 
@@ -273,6 +355,8 @@ WindowManager:
             radius: [0,0,10,10]
 
 <CalendarBox>:
+    id: 'calendar_box'
+
     padding: (0,10,0,10)
     spacing: dp(5)
     canvas.before:
@@ -299,7 +383,8 @@ WindowManager:
     background_normal: ''
     canvas.before:
         Color:
-            rgba: (200/255, 200/255, 200/255, 0.4) if self.state == 'normal' else (200/255, 200/255, 200/255, 1)
+            #rgba: (200/255, 200/255, 200/255, 0.4) if self.state == 'normal' else (200/255, 200/255, 200/255, 1)
+            rgba: (200/255, 200/255, 200/255, 0.4) if (self.disabled == False and self.state == 'normal') else (200/255, 200/255, 200/255, 1) if (self.disabled == False and self.state == 'down') else (100/255, 100/255, 100/255, 0.8)
         RoundedRectangle:
             size: self.size
             pos: self.pos
@@ -309,18 +394,50 @@ WindowManager:
     size_hint: 1, 0.25
     pos_hint: {'center_x': .5, 'center_y': .5}
     SelectButton:
+        id: select_btn
+        on_release:
+            app.root.current = 'qna_history'
+            app.root.get_screen('qna_history').access_history(root.ids.date.text)
+
     BoxLayout:
+        padding: ['5dp', 0, '5dp',0]
+        spacing: dp(7)
         Label:
+            id: date
             size_hint: 0.2 , 1
-            text: 'date'
+            #text: 'root.date'
+            canvas.before:
+                Color:
+                    rgba: (0.3, 0.3, 0.3, 1)
+                Line:
+                    points: self.size[0], 0 + 10, self.size[0], self.size[1] - 10
+                    width: 2
+
         Label:
-            text: 'question test question test question test question test'
+            id: question
+            #text: 'question question question question question question'
             text_size: self.size
             halign: 'left'
             valign: 'middle'
-        Label:
-            size_hint: 0.2 , 1
-            text: 'mood'
+            #canvas.before:
+            #    Color:
+            #        rgba: (200/255, 2/255, 2/255, 0.4)
+            #    RoundedRectangle:
+            #        size: self.size
+            #        pos: self.pos
+            #        radius: [20]
+        #Label:
+        Image:
+            id: mood
+            #source: 'images/moods/normal.png'
+            size_hint: 0.15 , 1
+            #text: 'root.mood'
+            canvas.before:
+                Color:
+                    rgba: (0.3, 0.3, 0.3, 1)
+                Line:
+                    points: self.pos[0] - dp(5), 0 + 10, self.pos[0] - dp(5), self.size[1] - 10
+                    width: 2
 
 
 <AnswerWriteBox@Popup>:
@@ -358,3 +475,4 @@ WindowManager:
                 root.dismiss()
                 #app.root.set_answer(answer_text.text)
                 app.root.get_screen('qna').set_answer(answer_text.text)
+
