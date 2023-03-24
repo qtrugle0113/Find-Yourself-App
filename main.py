@@ -14,8 +14,8 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.stacklayout import StackLayout
 
-Config.set('graphics', 'width', '450')
-Config.set('graphics', 'height', '1000')
+#Config.set('graphics', 'width', '450')
+#Config.set('graphics', 'height', '1000')
 
 from kivy.uix.button import Button
 from kivy.uix.label import Label
@@ -135,16 +135,6 @@ class HistoryWindow(Screen):
     today_text = month_name + ' ' + str(year)
 
 
-'''
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        for i in range(30):
-            size = dp(100)
-            b = Button(text=str(i+1), size_hint=(None, None), size=(size, size))
-            self.add_widget(b)
-'''
-
-
 class SelectDayHistory(Screen):
     mood = 'normal'
     question = 'question'
@@ -218,41 +208,9 @@ class CalendarBox(GridLayout):
             if question == '':
                 b.ids.select_btn.disabled = True
 
-            '''
-            row = SelectDayLayout()
-            row_inside = BoxLayout()
-            today = date.today().replace(day=1) + timedelta(days=i)
-            date_area = Label(text=today.strftime('%m/%d'), size_hint=(0.2, 1))
-
-
-            #question = answers_list[answers_list['date'] == today.strftime('%Y-%m-%d')].answer
-            if len(answers_list[answers_list['date'] == str(today)]) != 0:
-                question = answers_list[answers_list['date'] == str(today)].question.iloc[0]
-            else:
-                question = ''
-
-            mood_area = Label(text='mood', size_hint=(0.2, 1))
-            question_area = Label(text=question, halign='left', valign='middle')
-
-            mood_area.canvas.add(Color(2/ 255, 200/ 255, 2/ 255, 0.4))
-            mood_area.canvas.add(RoundedRectangle(size=self.size, pos=self.pos, radius=[20]))
-
-            question_area.canvas.add(Color(200/255, 2/255, 2/255, 0.4))
-            question_area.canvas.add(RoundedRectangle(size=self.size, pos=self.pos, radius = [20]))
-
-            row_inside.add_widget(date_area)
-            row_inside.add_widget(question_area)
-            row_inside.add_widget(mood_area)
-            row.add_widget(row_inside)
-            self.add_widget(row)
-            '''
-
 
 class SettingWindow(Screen):
     pass
-
-
-# kv = Builder.load_file('runapp.kv')
 
 
 class RunApp(App):

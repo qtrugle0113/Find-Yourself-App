@@ -52,7 +52,7 @@ WindowManager:
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
         BoxLayout:
-            size_hint: 1, 0.075
+            size_hint: (1, 0.075)
             pos_hint: {'center_x': .5, }
             padding: '10dp'
             spacing: '10dp'
@@ -93,12 +93,12 @@ WindowManager:
             min: 0
             max: 100
             pos_hint: {'center_x': 0.5, 'center_y': 0.15}
-            size_hint: 0.8, 0.05
+            size_hint: (0.8, 0.05)
             value: 50
             on_value: root.on_slider_value(self)
         Image:
             source: 'images/moods/normal.png' if root.mood == '' else 'images/moods/' + root.mood + '.png'
-            size_hint: None, None
+            size_hint: (None, None)
             width: dp(70)
             height: dp(70)
             #allow_stretch: False
@@ -140,15 +140,15 @@ WindowManager:
 
         Button:
             text: 'Back'
-            size_hint: None, None
-            size: '70dp', '70dp'
+            size_hint: (None, None)
+            size: ('70dp', '70dp')
             on_release:
                 app.root.current = 'main'
                 root.manager.transition.direction = 'right'
         Button:
             text: 'Save'
-            size_hint: None, None
-            size: '70dp', '70dp'
+            size_hint: (None, None)
+            size: ('70dp', '70dp')
             pos_hint: {'right': 1}
             on_release: root.save_answer()
 
@@ -172,13 +172,13 @@ WindowManager:
         #    min: 0
         #    max: 100
         #    pos_hint: {'center_x': 0.5, 'center_y': 0.15}
-        #    size_hint: 0.8, 0.05
+        #    size_hint: (0.8, 0.05)
         #    value: 50
         #    on_value: root.on_slider_value(self)
         Image:
             id: last_mood
             source: 'images/moods/normal.png' if root.mood == '' else 'images/moods/' + root.mood + '.png'
-            size_hint: None, None
+            size_hint: (None, None)
             width: dp(70)
             height: dp(70)
             #allow_stretch: False
@@ -220,15 +220,15 @@ WindowManager:
 
         Button:
             text: 'Back'
-            size_hint: None, None
-            size: '70dp', '70dp'
+            size_hint: (None, None)
+            size: ('70dp', '70dp')
             on_release:
                 app.root.current = 'history'
                 root.manager.transition.direction = 'right'
         #Button:
         #    text: 'Save'
-        #    size_hint: None, None
-        #    size: '70dp', '70dp'
+        #    size_hint: (None, None)
+        #    size: ('70dp', '70dp')
         #    pos_hint: {'right': 1}
         #    on_release: root.save_answer()
 
@@ -255,13 +255,13 @@ WindowManager:
                     font_size: dp(30)
             ScrollView:
                 CalendarBox:
-                    size_hint: 1, None
+                    size_hint: (1, None)
                     height: 3000
             BottomBar:
                 Button:
                     text: 'Back'
-                    size_hint: None, None
-                    size: '70dp', '70dp'
+                    size_hint: (None, None)
+                    size: ('70dp', '70dp')
                     on_release:
                         app.root.current = 'main'
                         root.manager.transition.direction = 'right'
@@ -285,8 +285,8 @@ WindowManager:
 
         Button:
             text: 'Back'
-            size_hint: None, None
-            size: '70dp', '70dp'
+            size_hint: (None, None)
+            size: ('70dp', '70dp')
             on_release:
                 app.root.current = 'main'
                 root.manager.transition.direction = 'right'
@@ -317,7 +317,7 @@ WindowManager:
             pos: self.pos
             radius: [10,10,10,0]
         Triangle:
-            points: self.pos[0] - 15, self.pos[1], self.pos[0], self.pos[1], self.pos[0], self.pos[1] + self.size[1]/4
+            points: (self.pos[0] - 15, self.pos[1], self.pos[0], self.pos[1], self.pos[0], self.pos[1] + self.size[1]/4)
 
 
 <AnswerChatBox@Label>:
@@ -329,7 +329,7 @@ WindowManager:
             pos: self.pos
             radius: [10,10,0,10]
         Triangle:
-            points: self.pos[0] + self.size[0], self.pos[1], self.pos[0] + self.size[0] + 15, self.pos[1], self.pos[0] + self.size[0], self.pos[1] + self.size[1]/4
+            points: (self.pos[0] + self.size[0], self.pos[1], self.pos[0] + self.size[0] + 15, self.pos[1], self.pos[0] + self.size[0], self.pos[1] + self.size[1]/4)
 
 
 <TypeBox@Button>:
@@ -345,7 +345,7 @@ WindowManager:
 
 
 <TopBar@BoxLayout>:
-    size_hint: 1, 0.08
+    size_hint: (1, 0.08)
     canvas.before:
         Color:
             rgba: (240/255, 240/255, 240/255, 0.3)
@@ -368,7 +368,7 @@ WindowManager:
             radius: [10,10,10,10]
 
 <BottomBar@BoxLayout>:
-    size_hint: 1, 0.08
+    size_hint: (1, 0.08)
     canvas.before:
         Color:
             rgba: (240/255, 240/255, 240/255, 0.3)
@@ -391,7 +391,7 @@ WindowManager:
             radius: [20]
 
 <SelectDayLayout>:
-    size_hint: 1, 0.25
+    size_hint: (1, 0.25)
     pos_hint: {'center_x': .5, 'center_y': .5}
     SelectButton:
         id: select_btn
@@ -404,13 +404,13 @@ WindowManager:
         spacing: dp(7)
         Label:
             id: date
-            size_hint: 0.2 , 1
+            size_hint: (0.2 , 1)
             #text: 'root.date'
             canvas.before:
                 Color:
                     rgba: (0.3, 0.3, 0.3, 1)
                 Line:
-                    points: self.size[0], 0 + 10, self.size[0], self.size[1] - 10
+                    points: (self.size[0], 0 + 10, self.size[0], self.size[1] - 10)
                     width: 2
 
         Label:
@@ -430,13 +430,13 @@ WindowManager:
         Image:
             id: mood
             #source: 'images/moods/normal.png'
-            size_hint: 0.15 , 1
+            size_hint: (0.15 , 1)
             #text: 'root.mood'
             canvas.before:
                 Color:
                     rgba: (0.3, 0.3, 0.3, 1)
                 Line:
-                    points: self.pos[0] - dp(5), 0 + 10, self.pos[0] - dp(5), self.size[1] - 10
+                    points: (self.pos[0] - dp(5), 0 + 10, self.pos[0] - dp(5), self.size[1] - 10)
                     width: 2
 
 
@@ -444,7 +444,7 @@ WindowManager:
     background_color: (0,0,0,0)
     title: 'Your answer:'
     auto_dismiss: True
-    size_hint: 0.9, 0.65
+    size_hint: (0.9, 0.65)
     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
     BoxLayout
         orientation: 'vertical'
@@ -466,8 +466,8 @@ WindowManager:
                 Color:
                     rgba: (1, 1, 1, 1)
         Button:
-            size_hint: 0.2, 0.1
-            #size: '70dp', '70dp'
+            size_hint: (0.2, 0.1)
+            #size: ('70dp', '70dp')
             pos_hint: {'right': 1, 'bottom': 0}
             text: 'Answer'
             font_size: dp(15)
