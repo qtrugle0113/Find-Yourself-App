@@ -1,7 +1,6 @@
 # Find Yourself App
 ## Download:
-**Google Drive: https://drive.google.com/file/d/1vOiA2JkkZebcdCkY8IbfiqGAzJOavF4w/**<br />
-**Google Play Store: (Available soon)**
+**Google Play Store: https://play.google.com/store/apps/details?id=org.qnurtstudio.findyourself**<br />
 ## OS: Android
 ## Support language(s): English, Korean (Vietnamese will be added in the future)
 ## App features: 
