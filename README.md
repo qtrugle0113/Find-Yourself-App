@@ -8,6 +8,7 @@
 **- Available to view history questions and answers by date**<br />
 **- Available to view history answers by question**<br />
 **- Available to change language, turn ON/OFF music, sound in Setting screen**<br />
+*- Using OpenAI API to create response to user's answer (Coming soon)*<br />
 ## Screenshots:
 ![Screenshot_20230404-224117_(1)](https://user-images.githubusercontent.com/86500497/230331835-6147f769-57b4-447b-b8ee-c22feb74c666.png)
 ![Screenshot_20230404-224126_(1)](https://user-images.githubusercontent.com/86500497/230331841-3aac6116-081b-4c0a-b328-29bc0aa3a2b3.png)
