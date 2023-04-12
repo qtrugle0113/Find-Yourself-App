@@ -17,5 +17,5 @@
 ![Screenshot_20230404-224213](https://user-images.githubusercontent.com/86500497/230331863-1830a6c0-5691-45e2-9f99-c8d501b42e64.png)
 ![Screenshot_20230406-175353](https://user-images.githubusercontent.com/86500497/230332608-a6d10a10-a41a-4865-8759-f6e9831d708d.png)
 <br /><br />**- v2.0: Add responsive feature by using openAI API** *(Coming soon)* <br /><br />
-![Screenshot_20230420-023116_(1)](https://user-images.githubusercontent.com/86500497/231541856-b9b1754e-1077-4923-8d49-622cb365b2b7.png)
-![Screenshot_20230413-012909_(1)](https://user-images.githubusercontent.com/86500497/231542027-0ff1cb2e-f9fb-485c-94e0-f3a494383dc5.png)
+![Screenshot_20230420-023116_(1)](https://user-images.githubusercontent.com/86500497/231584947-cdd8e3de-5484-443d-b158-a0a3274d1a1c.png)
+![Screenshot_20230413-012909_(1)](https://user-images.githubusercontent.com/86500497/231584936-736a2acc-e629-4710-854b-f610353d6c29.png)
